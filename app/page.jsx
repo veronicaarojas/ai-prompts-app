@@ -1,4 +1,5 @@
- 
+import Feed from "@components/Feed";
+
 const Home = () => {
   return (
     <section className="w-full flex-center flex flex-col">
@@ -15,7 +16,7 @@ const Home = () => {
       maximise the power of ever-evolving AI.
     </p>
 
-    {/* Feed */}
+    <Feed/>
 
     </section>
   )
