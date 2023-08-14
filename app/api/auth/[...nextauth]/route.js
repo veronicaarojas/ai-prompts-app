@@ -4,6 +4,8 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from 'next-auth/providers/google';
 
+import User from '@models/User';
+
 import { connectToDB } from '@utils/database';
 
 console.log({
@@ -18,7 +20,14 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     })
   ],
+  callbacks: {
   async session({ session }) {
+    const sessionUser = await User.findOne({
+      email: session.user.email
+    })
+    
+    session.user.id = sessionUser._id.toString();
+    return session;
 
   },
   async signIn({ profile }) {
@@ -26,8 +35,18 @@ const handler = NextAuth({
       await connectToDB();
 
       //CHECK IF THE USER ALREADY EXISTS
+      const userExists = await User.findOne({
+        email: profile.email
+      });
 
       //IF NOT, CREATE A NEW USER AND SAVE TO DATABASE
+      if(!userExists) {
+        await User.create({
+          email: profile.email,
+          username: profile.name.replace(" ", "").toLowerCase(),
+          image: profile.picture
+        })
+      }
       return true;
     } catch(error) {
       console.log(error);
@@ -35,6 +54,7 @@ const handler = NextAuth({
     }
 
   }
+},
 })
 
 export { handler as GET, handler as POST};
