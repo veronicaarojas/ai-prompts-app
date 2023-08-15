@@ -11,6 +11,7 @@ import Profile from '@components/profile';
 
 function ProfilePage() {
   const { data: session } = useSession();
+  const Router = useRouter();
 
   const [posts, setPosts] = useState([]);
 
@@ -29,7 +30,7 @@ function ProfilePage() {
   }, [])
 
   const handleEdit = () => {
-
+    
   }
 
   const handleDelete = async () => {
