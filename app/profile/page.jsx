@@ -11,7 +11,7 @@ import Profile from '@components/profile';
 
 function ProfilePage() {
   const { data: session } = useSession();
-  const Router = useRouter();
+  const router = useRouter();
 
   const [posts, setPosts] = useState([]);
 
@@ -29,11 +29,12 @@ function ProfilePage() {
 
   }, [])
 
-  const handleEdit = () => {
+  const handleEdit = (post) => {
+    router.push(`/update-prompt?id=${post._id}`)
     
   }
 
-  const handleDelete = async () => {
+  const handleDelete = async (post) => {
 
   }
 
