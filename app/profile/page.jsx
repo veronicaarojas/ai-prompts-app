@@ -10,10 +10,12 @@ import Profile from '@components/profile';
  
 
 function ProfilePage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   const [posts, setPosts] = useState([]);
+
+ 
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -27,7 +29,7 @@ function ProfilePage() {
 
     fetchPosts();
 
-  }, [posts])
+  }, [posts, session?.user.id])
 
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`)
@@ -49,6 +51,10 @@ function ProfilePage() {
 
       }
     }
+  }
+
+  if(status === "unauthenticated") {
+    return <p>You are not authorized to view this page. Please Sign In.</p>
   }
 
   return (

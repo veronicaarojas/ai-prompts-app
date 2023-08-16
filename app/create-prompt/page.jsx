@@ -7,13 +7,17 @@ import Form from '@components/Form';
 
 const CreatePrompt = () => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const [submitting, setSubmitting] = useState(false);
   const [post, setPost] = useState({
     prompt: '',
     tag: '',
   });
+
+  if(status === "unauthenticated") {
+    return <p>You are not authorized to view this page. Please Sign In.</p>
+  }
 
   const createPrompt = async (e) => {
     e.preventDefault();

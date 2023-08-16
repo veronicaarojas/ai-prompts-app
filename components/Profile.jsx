@@ -6,6 +6,8 @@ const Profile = ({ name,
   data,
   handleEdit,
   handleDelete }) => {
+
+    
   return (
     <section className='w-full'>
       <h1 className='head_text text-left'>
