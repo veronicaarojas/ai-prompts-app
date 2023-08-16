@@ -42,7 +42,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       })
 
       if(response.ok) {
-        router.push('/')
+        router.push('/favorites-page')
       }
 
 
