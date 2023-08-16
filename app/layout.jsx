@@ -2,6 +2,8 @@ import '@styles/globals.css';
 
 import Nav from '@components/Nav';
 import Provider from '@components/Provider';
+import Loading from './loading';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: "Abundance of Prompts",
@@ -19,6 +21,7 @@ const RootLayout = ({ children }) => {
         
         <main className='app'>
           <Nav/>
+          <Suspense fallback={<Loading/>}/>
           {children}
         </main>
         </Provider>
