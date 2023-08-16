@@ -10,7 +10,7 @@ import Profile from '@components/profile';
  
 
 function UserProfilePage({ params }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const username = searchParams.get('name');
@@ -31,7 +31,7 @@ function UserProfilePage({ params }) {
 
     fetchPosts();
 
-  }, [params.id])
+  }, [params.id, session])
 
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`)
@@ -53,6 +53,10 @@ function UserProfilePage({ params }) {
 
       }
     }
+  }
+
+  if(status === "unauthenticated") {
+    return <p>You are not authorized to view this page. Please Sign In.</p>
   }
 
   return (

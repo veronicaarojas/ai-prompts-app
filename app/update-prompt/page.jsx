@@ -8,7 +8,7 @@ import Form from '@components/Form';
 
 const EditPrompt = () => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const promptId = searchParams.get('id');
 
@@ -56,6 +56,10 @@ const EditPrompt = () => {
       setSubmitting(false);
     }
 
+  }
+
+  if(status === "unauthenticated") {
+    return <p>You are not authorized to view this page. Please Sign In.</p>
   }
 
   return (
