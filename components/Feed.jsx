@@ -65,6 +65,13 @@ const Feed = () => {
     );
   };
 
+  const handleTagClick = (tag) => {
+    setSearchText(tag);
+
+    const searchResult = filterPrompts(tag);
+    setSearchResults(searchResult);
+  };
+
   
 
   useEffect(() => {
@@ -98,12 +105,12 @@ const Feed = () => {
       {searchText ? (
       <PromptCardList
       data={searchResults}
-      // handleTagClick={() => {}}
+      handleTagClick={() => handleTagClick()}
       />
        ) : (
     <PromptCardList
       data={posts}
-      // handleTagClick={() => {}}
+      handleTagClick={() => handleTagClick()}
       /> 
        )}
       

@@ -21,8 +21,9 @@ const RootLayout = ({ children }) => {
         
         <main className='app'>
           <Nav/>
-          <Suspense fallback={<Loading/>}/>
+          <Suspense fallback={<Loading/>}>
           {children}
+          </Suspense>
         </main>
         </Provider>
 
