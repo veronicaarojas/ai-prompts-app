@@ -1,5 +1,6 @@
 import { connectToDB } from "@utils/database";
 import Favorite from "@models/favorite";
+import Prompt from "@models/prompt";
 
 //GET Favorites 
 
@@ -7,14 +8,20 @@ export const GET = async (req, { params }) => {
   try {
     await connectToDB();
 
-    const favorite = await Favorite.find({
-      userId: params.id
-    }).populate('userId');
-    if(!favorite) return new Response("favorite prompt not found", {status: 404});
+    const favorites = await Favorite.find({
+      userId: params.id });
 
-    return new Response(JSON.stringify(favorite), {
-      status:200 
-    })
+    if(!favorites) return new Response("favorite prompt not found", {status: 404});
+
+
+    //extract postId from favorites. 
+    const favoritePostIds = favorites.map((favorite) => favorite.postId);
+
+    //fetch corresponding post content 
+    const posts = await Prompt.find({ _id: {$in: favoritePostIds}}).populate('creator');
+
+    return new Response(JSON.stringify(posts), {status: 200});
+
 
   } catch (error) {
     return new Response('Failed to fetch favorite prompts.', {

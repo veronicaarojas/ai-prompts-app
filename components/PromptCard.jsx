@@ -42,7 +42,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       })
 
       if(response.ok) {
-        router.push('/favorites-page')
+        router.push(`/favorites-page/${session?.user.id}`)
       }
 
 
