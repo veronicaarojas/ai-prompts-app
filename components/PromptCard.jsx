@@ -5,6 +5,9 @@ import Image from 'next/image';
 import {useSession} from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-regular-svg-icons';
+
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const [copied, setCopied] = useState("");
@@ -76,6 +79,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     >
       #{post.tag}
     </p>
+    {session?.user.id && session?.user.id !== post.creator._id && (
+    <div className='my-2 flex justify-end cursor-pointer'>
+    <FontAwesomeIcon icon={faHeart} />
+    </div>
+    )
+    }
 
     {session?.user.id === post.creator._id &&
     pathName === "/profile" && (
