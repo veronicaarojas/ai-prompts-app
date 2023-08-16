@@ -4,7 +4,6 @@ import {useState} from 'react';
 import Image from 'next/image';
 import {useSession} from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 
@@ -14,6 +13,9 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const { data: session } = useSession();
   const pathName = usePathname();
   const router = useRouter();
+
+
+  const [favorite, setFavorite] = useState(false);
 
   const handleProfileClick = () => {
     
@@ -80,11 +82,19 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       #{post.tag}
     </p>
     {session?.user.id && session?.user.id !== post.creator._id && (
+
     <div className='my-2 flex justify-end cursor-pointer'>
-    <FontAwesomeIcon icon={faHeart} />
+    
+    <FontAwesomeIcon 
+    className={favorite ? 'favorite-heart' : 'not-favorite'}
+    onClick={() => setFavorite(!favorite)}
+    icon={faHeart}/>
+    
+    
     </div>
-    )
-    }
+    )}
+    
+
 
     {session?.user.id === post.creator._id &&
     pathName === "/profile" && (
