@@ -15,7 +15,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const router = useRouter();
 
 
-  const [favorite, setFavorite] = useState(false);
+  // const [favorite, setFavorite] = useState(false);
 
   const handleProfileClick = () => {
     
@@ -28,6 +28,27 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     setCopied(post.prompt);
     navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000);
+  }
+
+  const handleAddToFavorites = async (e) => {
+    
+     try {
+      const response = await fetch(`/api/users/${session?.user.id}/favorites`, {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: session?.user.id,
+          postId: post._id
+        })
+      })
+
+      if(response.ok) {
+        router.push('/')
+      }
+
+
+     } catch (error) {
+      console.log(error);
+     }
   }
 
   return (
@@ -83,11 +104,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     </p>
     {session?.user.id && session?.user.id !== post.creator._id && (
 
-    <div className='my-2 flex justify-end cursor-pointer'>
+    <div className='my-2 flex justify-end cursor-pointer'
+    onClick={() => handleAddToFavorites()}>
     
     <FontAwesomeIcon 
-    className={favorite ? 'favorite-heart' : 'not-favorite'}
-    onClick={() => setFavorite(!favorite)}
+    // className={favorite ? 'favorite-heart' : 'not-favorite'}
+    
     icon={faHeart}/>
     
     
