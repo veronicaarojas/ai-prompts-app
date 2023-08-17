@@ -9,7 +9,8 @@ const FavoriteSchema = new Schema({
   postId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Prompt',
-    required: [true, 'Prompt is required']
+    required: [true, 'Prompt is required'],
+    unique: [true, 'Post already favorited']
   }
 });
 

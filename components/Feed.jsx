@@ -84,7 +84,24 @@ const Feed = () => {
 
     fetchPosts();
 
-  }, [])
+  }, []);
+
+
+  // useEffect(() => {
+  //   if(session?.user.id) {
+  //   const fetchFavorites = async () => {
+  //     const response = await fetch(`/api/users/${session?.user.id}/favorites`);
+  //     const data = await response.json();
+
+  //     if(session?.user.id) {
+  //       setFavorites(data);
+  //       setFavoritePostIds(favorites.map(item => item._id));
+  //     }
+  //   }
+  //   fetchFavorites();
+  // }
+  // },[session?.user.id]);
+
 
   return (
     <section className='feed'>

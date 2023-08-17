@@ -1,8 +1,8 @@
 "use client";
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Image from 'next/image';
-import {useSession} from 'next-auth/react';
+import { useSession  } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
@@ -14,8 +14,29 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const pathName = usePathname();
   const router = useRouter();
 
+  
 
-  // const [favorite, setFavorite] = useState(false);
+
+  const [favorites, setFavorites] = useState([]);
+  const [favoritePostIds, setFavoritePostIds] = useState([]);
+
+  
+  
+
+  useEffect(() => {
+    if(session?.user.id) {
+    const fetchFavorites = async () => {
+      const response = await fetch(`/api/users/${session?.user.id}/favorites`);
+      const data = await response.json();
+
+      if(session?.user.id) {
+        setFavorites(data);
+        setFavoritePostIds(favorites.map(item => item._id));
+      }
+    }
+    fetchFavorites();
+  }
+  },[session?.user.id]);
 
   const handleProfileClick = () => {
     
@@ -33,7 +54,26 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const handleAddToFavorites = async (e) => {
     
      try {
-      const response = await fetch(`/api/users/${session?.user.id}/favorites`, {
+       
+
+
+      const isPostInFavorites = favoritePostIds.includes(post._id);
+      const updatedFavorites = [...favoritePostIds];
+      if(isPostInFavorites) {
+         await fetch(`/api/users/${session?.user.id}/favorites`, {
+          method: "DELETE",
+        });
+
+        const updatedFavorites = favoritePostIds.filter((f) => f !== post._id);
+
+        setFavoritePostIds(updatedFavorites);
+
+        
+
+
+      }
+
+        await fetch(`/api/users/${session?.user.id}/favorites`, {
         method: 'POST',
         body: JSON.stringify({
           userId: session?.user.id,
@@ -41,9 +81,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
         })
       })
 
-      if(response.ok) {
-        router.push(`/favorites-page/${session?.user.id}`)
-      }
+      setFavoritePostIds(updatedFavorites.push(post._id));
+      
+
+      // if(response.ok) {
+      //   router.push(`/favorites-page/${session?.user.id}`)
+      // }
 
 
      } catch (error) {
@@ -106,12 +149,16 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     <div className='my-2 flex justify-end cursor-pointer'
     onClick={() => handleAddToFavorites()}>
+
     
     <FontAwesomeIcon 
-    // className={favorite ? 'favorite-heart' : 'not-favorite'}
+    icon={faHeart}
+    // className={isFavorite ? 'favorite-heart' : 'not-favorite'}
+    />
     
-    icon={faHeart}/>
     
+  
+  
     
     </div>
     )}
