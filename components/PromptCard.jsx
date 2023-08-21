@@ -23,20 +23,20 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   
   
 
-  useEffect(() => {
-    if(session?.user.id) {
-    const fetchFavorites = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/favorites`);
-      const data = await response.json();
+  // useEffect(() => {
+  //   if(session?.user.id) {
+  //   const fetchFavorites = async () => {
+  //     const response = await fetch(`/api/users/${session?.user.id}/favorites`);
+  //     const data = await response.json();
 
-      if(session?.user.id) {
-        setFavorites(data);
-        setFavoritePostIds(favorites.map(item => item._id));
-      }
-    }
-    fetchFavorites();
-  }
-  },[session?.user.id]);
+  //     if(session?.user.id) {
+  //       setFavorites(data);
+  //       setFavoritePostIds(favorites.map(item => item._id));
+  //     }
+  //   }
+  //   fetchFavorites();
+  // }
+  // },[session?.user.id]);
 
   const handleProfileClick = () => {
     
@@ -51,48 +51,48 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     setTimeout(() => setCopied(""), 3000);
   }
 
-  const handleAddToFavorites = async (e) => {
+  // const handleAddToFavorites = async (e) => {
     
-     try {
+  //    try {
        
 
 
-      const isPostInFavorites = favoritePostIds.includes(post._id);
-      const updatedFavorites = [...favoritePostIds];
-      if(isPostInFavorites) {
-         await fetch(`/api/users/${session?.user.id}/favorites`, {
-          method: "DELETE",
-        });
+  //     const isPostInFavorites = favoritePostIds.includes(post._id);
+  //     const updatedFavorites = [...favoritePostIds];
+  //     if(isPostInFavorites) {
+  //        await fetch(`/api/users/${session?.user.id}/favorites`, {
+  //         method: "DELETE",
+  //       });
 
-        const updatedFavorites = favoritePostIds.filter((f) => f !== post._id);
+  //       const updatedFavorites = favoritePostIds.filter((f) => f !== post._id);
 
-        setFavoritePostIds(updatedFavorites);
+  //       setFavoritePostIds(updatedFavorites);
 
         
 
 
-      }
+  //     }
 
-        await fetch(`/api/users/${session?.user.id}/favorites`, {
-        method: 'POST',
-        body: JSON.stringify({
-          userId: session?.user.id,
-          postId: post._id
-        })
-      })
+  //       await fetch(`/api/users/${session?.user.id}/favorites`, {
+  //       method: 'POST',
+  //       body: JSON.stringify({
+  //         userId: session?.user.id,
+  //         postId: post._id
+  //       })
+  //     })
 
-      setFavoritePostIds(updatedFavorites.push(post._id));
+  //     setFavoritePostIds(updatedFavorites.push(post._id));
       
 
-      // if(response.ok) {
-      //   router.push(`/favorites-page/${session?.user.id}`)
-      // }
+  //     // if(response.ok) {
+  //     //   router.push(`/favorites-page/${session?.user.id}`)
+  //     // }
 
 
-     } catch (error) {
-      console.log(error);
-     }
-  }
+  //    } catch (error) {
+  //     console.log(error);
+  //    }
+  // }
 
   return (
     <div className='prompt_card'>
