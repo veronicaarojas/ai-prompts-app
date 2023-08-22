@@ -23,6 +23,10 @@ const FavoritesPage = () => {
     }
   }
 
+  const removeFromFavorites = (post) => {
+    
+  }
+
   
 
   if(status === "unauthenticated") {
@@ -47,7 +51,7 @@ const FavoritesPage = () => {
       post={favorite}
       updateFavorites={fetchFavorites()}
       favorites={favorites}
-      
+      onRemoveFromFavorites={removeFromFavorites}
       />
       ))}
     </div>

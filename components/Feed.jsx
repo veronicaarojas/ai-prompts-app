@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 
 import PromptCard from './PromptCard';
 
-const PromptCardList = ({data, handleTagClick, favorites}) => {
+const PromptCardList = ({data, handleTagClick, favorites, onAddToFavorites}) => {
   return (
   <div className='mt-16 prompt_layout'>
     {data.map((post) => (
@@ -12,7 +12,8 @@ const PromptCardList = ({data, handleTagClick, favorites}) => {
     key={post._id}
     post={post}
     handleTagClick={handleTagClick}
-    favorites={favorites}/>
+    favorites={favorites}
+    onAddToFavorites={onAddToFavorites}/>
     ))}
   </div>
   )
@@ -103,6 +104,22 @@ const Feed = () => {
     }
   }
 
+  const addToFavorites = async (post) => {
+
+    try {
+      const response = await fetch (`/api/users/${session?.user.id}/favorites`, {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: session?.user.id,
+          postId: post._id
+        })
+      })
+    } catch(error) {
+      console.log(error)
+    }
+
+  }
+
 
 
 
@@ -127,12 +144,14 @@ const Feed = () => {
       data={searchResults}
       handleTagClick={() => handleTagClick()}
       favorites={favorites}
+      onAddToFavorites={addToFavorites}
       />
        ) : (
     <PromptCardList
       data={posts}
       handleTagClick={() => handleTagClick()}
       favorites={favorites}
+      onAddToFavorites={addToFavorites}
       /> 
        )}
       
