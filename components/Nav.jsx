@@ -115,6 +115,13 @@ const Nav = () => {
                   >
                     Create a prompt 
                   </Link>
+                  <Link
+                  href="/favorites-page"
+                  className="dropdown_link"
+                  onClick={() => setToggleDropdown(false)}
+                  >
+                    View Favorites 
+                  </Link>
 
                   <button
                   type="button"
