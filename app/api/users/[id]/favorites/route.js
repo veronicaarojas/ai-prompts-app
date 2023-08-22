@@ -55,11 +55,14 @@ export const POST = async (req) => {
 
 //Remove a favorite 
 
-export const DELETE = async (req, { params }) => {
+export const DELETE = async (req, { params, postId }) => {
   try {
     await connectToDB();
 
-    await Favorite.findByIdAndRemove(params.id);
+    await Favorite.deleteMany({
+    userId: params.id,
+    postId: postId
+    });
     return new Response("Favorite deleted successfully", {status: 200})
   } catch (error) {
     return new Response("Failed to delete Favorite", {
