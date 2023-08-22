@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 
 import PromptCard from './PromptCard';
 
-const PromptCardList = ({data, handleTagClick, favorites, onAddToFavorites}) => {
+const PromptCardList = ({data, handleTagClick, favorites, onAddToFavorites, onRemoveFromFavorites}) => {
   return (
   <div className='mt-16 prompt_layout'>
     {data.map((post) => (
@@ -13,7 +13,8 @@ const PromptCardList = ({data, handleTagClick, favorites, onAddToFavorites}) => 
     post={post}
     handleTagClick={handleTagClick}
     favorites={favorites}
-    onAddToFavorites={onAddToFavorites}/>
+    onAddToFavorites={onAddToFavorites}
+    onRemoveFromFavorites={onRemoveFromFavorites}/>
     ))}
   </div>
   )
@@ -107,16 +108,36 @@ const Feed = () => {
   const addToFavorites = async (post) => {
 
     try {
-      const response = await fetch (`/api/users/${session?.user.id}/favorites`, {
+       await fetch (`/api/users/${session?.user.id}/favorites`, {
         method: 'POST',
         body: JSON.stringify({
           userId: session?.user.id,
           postId: post._id
         })
       })
+
+      fetchFavorites();
     } catch(error) {
       console.log(error)
     }
+
+  }
+
+  const removeFromFavorites = async (post) => {
+
+    try {
+     await fetch(`/api/users/${session?.user.id}/favorites`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        postId: post._id
+      })
+     })
+     fetchFavorites();
+
+    } catch(error) {
+      console.log(error);
+    }
+
 
   }
 
@@ -152,6 +173,7 @@ const Feed = () => {
       handleTagClick={() => handleTagClick()}
       favorites={favorites}
       onAddToFavorites={addToFavorites}
+      onRemoveFromFavorites={removeFromFavorites}
       /> 
        )}
       
