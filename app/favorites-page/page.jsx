@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import PromptCard from '@components/PromptCard';
 
-const FavoritesPage = ({ params }) => {
+const FavoritesPage = () => {
   const { data: session, status } = useSession();
   const [favorites, setFavorites] = useState([]);
 
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      const response = await fetch(`/api/users/${params.id}/favorites`);
+      const response = await fetch(`/api/users/${session?.user.id}/favorites`);
       const data = await response.json();
 
       if(session?.user.id) {
@@ -18,7 +18,7 @@ const FavoritesPage = ({ params }) => {
       }
     }
     fetchFavorites();
-  },[params.id])
+  },[session?.user.id])
 
   if(status === "unauthenticated") {
     return <p>You are not authorized. Please Sign In.</p>
@@ -36,12 +36,12 @@ const FavoritesPage = ({ params }) => {
     <p className="desc text-left"> A place for all the prompts you liked enough to save</p>
 
     <div className='mt-10 prompt_layout'>
-  {favorites.map((favorite) => (
-  <PromptCard
-  key={favorite._id}
-  post={favorite}/>
-  ))}
-</div>
+      {favorites.map((favorite) => (
+      <PromptCard
+      key={favorite._id}
+      post={favorite}/>
+      ))}
+    </div>
     
 
   </section>

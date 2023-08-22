@@ -50,6 +50,12 @@ const Nav = () => {
             >
             Create Post
             </Link>
+            <Link 
+            href="/favorites-page"
+            className="black_btn"
+            >
+            View Favorites
+            </Link>
             <button type="button" onClick={signOut}
              className="outline_btn">
               Sign Out
