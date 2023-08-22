@@ -129,7 +129,8 @@ const Feed = () => {
      await fetch(`/api/users/${session?.user.id}/favorites`, {
       method: 'DELETE',
       body: JSON.stringify({
-        postId: post._id
+        postId: post._id,
+        userId: session?.user.id,
       })
      })
      fetchFavorites();

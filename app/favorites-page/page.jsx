@@ -23,8 +23,20 @@ const FavoritesPage = () => {
     }
   }
 
-  const removeFromFavorites = (post) => {
-    
+  const removeFromFavorites = async (post) => {
+    try {
+      await fetch(`/api/users/${session?.user.id}/favorites`, {
+       method: 'DELETE',
+       body: JSON.stringify({
+         postId: post._id,
+         userId: session?.user.id,
+       })
+      })
+      fetchFavorites();
+ 
+     } catch(error) {
+       console.log(error);
+     }
   }
 
   

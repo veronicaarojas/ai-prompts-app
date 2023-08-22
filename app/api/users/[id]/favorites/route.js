@@ -55,14 +55,22 @@ export const POST = async (req) => {
 
 //Remove a favorite 
 
-export const DELETE = async (req, { params, postId }) => {
+export const DELETE = async (req) => {
+  const { userId, postId } = await req.json();
+
   try {
     await connectToDB();
 
-    await Favorite.deleteMany({
-    userId: params.id,
+    const result = await Favorite.findOneAndDelete({
+    userId: userId,
     postId: postId
     });
+
+    if (!result) {
+      console.error('Favorite not found');
+      return new Response("Favorite not found", { status: 404 });
+    }
+
     return new Response("Favorite deleted successfully", {status: 200})
   } catch (error) {
     return new Response("Failed to delete Favorite", {
