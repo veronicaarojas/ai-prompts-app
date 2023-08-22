@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 
 
-const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
+const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, onAddToFavorites, onRemoveFromFavorites, favorites }) => {
   const [copied, setCopied] = useState("");
   const { data: session } = useSession();
   const pathName = usePathname();
@@ -16,27 +16,9 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
   
 
-
-  const [favorites, setFavorites] = useState([]);
-  const [favoritePostIds, setFavoritePostIds] = useState([]);
-
   
   
 
-  // useEffect(() => {
-  //   if(session?.user.id) {
-  //   const fetchFavorites = async () => {
-  //     const response = await fetch(`/api/users/${session?.user.id}/favorites`);
-  //     const data = await response.json();
-
-  //     if(session?.user.id) {
-  //       setFavorites(data);
-  //       setFavoritePostIds(favorites.map(item => item._id));
-  //     }
-  //   }
-  //   fetchFavorites();
-  // }
-  // },[session?.user.id]);
 
   const handleProfileClick = () => {
     
@@ -50,49 +32,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000);
   }
-
-  // const handleAddToFavorites = async (e) => {
-    
-  //    try {
        
-
-
-  //     const isPostInFavorites = favoritePostIds.includes(post._id);
-  //     const updatedFavorites = [...favoritePostIds];
-  //     if(isPostInFavorites) {
-  //        await fetch(`/api/users/${session?.user.id}/favorites`, {
-  //         method: "DELETE",
-  //       });
-
-  //       const updatedFavorites = favoritePostIds.filter((f) => f !== post._id);
-
-  //       setFavoritePostIds(updatedFavorites);
-
-        
-
-
-  //     }
-
-  //       await fetch(`/api/users/${session?.user.id}/favorites`, {
-  //       method: 'POST',
-  //       body: JSON.stringify({
-  //         userId: session?.user.id,
-  //         postId: post._id
-  //       })
-  //     })
-
-  //     setFavoritePostIds(updatedFavorites.push(post._id));
-      
-
-  //     // if(response.ok) {
-  //     //   router.push(`/favorites-page/${session?.user.id}`)
-  //     // }
-
-
-  //    } catch (error) {
-  //     console.log(error);
-  //    }
-  // }
 
   return (
     <div className='prompt_card'>
@@ -145,21 +85,32 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     >
       #{post.tag}
     </p>
-    {session?.user.id && session?.user.id !== post.creator._id && (
+    {session?.user.id && session?.user.id !== post.creator._id &&  (
 
     <div className='my-2 flex justify-end cursor-pointer'
-    onClick={() => handleAddToFavorites()}>
+    >
 
-    
+    {favorites.some((favorite) => favorite._id === post._id) ? 
+    (
+    <div
+    onClick={() => onRemoveFromFavorites(post)}>
     <FontAwesomeIcon 
     icon={faHeart}
-    // className={isFavorite ? 'favorite-heart' : 'not-favorite'}
+    className="favorite-heart"
     />
+    </div> ) : 
+    ( 
+    <div
+    onClick={() => onAddToFavorites(post)}>
+    <FontAwesomeIcon 
+    icon={faHeart}
+    className="not-favorite"
+    />
+    </div>
+    )
+    }
     
-    
-  
-  
-    
+
     </div>
     )}
     

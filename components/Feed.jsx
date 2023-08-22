@@ -1,16 +1,18 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 import PromptCard from './PromptCard';
 
-const PromptCardList = ({data, handleTagClick}) => {
+const PromptCardList = ({data, handleTagClick, favorites}) => {
   return (
   <div className='mt-16 prompt_layout'>
     {data.map((post) => (
     <PromptCard
     key={post._id}
     post={post}
-    handleTagClick={handleTagClick}/>
+    handleTagClick={handleTagClick}
+    favorites={favorites}/>
     ))}
   </div>
   )
@@ -19,6 +21,8 @@ const PromptCardList = ({data, handleTagClick}) => {
 const Feed = () => {
   
   const [posts, setPosts] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const { data: session, status } = useSession();
 
   const [searchText, setSearchText] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
@@ -86,21 +90,20 @@ const Feed = () => {
 
   }, []);
 
+  useEffect(() => {
+    fetchFavorites();
+  },[session?.user.id])
 
-  // useEffect(() => {
-  //   if(session?.user.id) {
-  //   const fetchFavorites = async () => {
-  //     const response = await fetch(`/api/users/${session?.user.id}/favorites`);
-  //     const data = await response.json();
+  const fetchFavorites = async () => {
+    const response = await fetch(`/api/users/${session?.user.id}/favorites`);
+    const data = await response.json();
 
-  //     if(session?.user.id) {
-  //       setFavorites(data);
-  //       setFavoritePostIds(favorites.map(item => item._id));
-  //     }
-  //   }
-  //   fetchFavorites();
-  // }
-  // },[session?.user.id]);
+    if(session?.user.id) {
+      setFavorites(data);
+    }
+  }
+
+
 
 
   return (
@@ -123,11 +126,13 @@ const Feed = () => {
       <PromptCardList
       data={searchResults}
       handleTagClick={() => handleTagClick()}
+      favorites={favorites}
       />
        ) : (
     <PromptCardList
       data={posts}
       handleTagClick={() => handleTagClick()}
+      favorites={favorites}
       /> 
        )}
       

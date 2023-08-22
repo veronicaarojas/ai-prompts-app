@@ -7,18 +7,23 @@ const FavoritesPage = () => {
   const { data: session, status } = useSession();
   const [favorites, setFavorites] = useState([]);
 
+  
+
 
   useEffect(() => {
-    const fetchFavorites = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/favorites`);
-      const data = await response.json();
-
-      if(session?.user.id) {
-        setFavorites(data);
-      }
-    }
     fetchFavorites();
   },[session?.user.id])
+
+  const fetchFavorites = async () => {
+    const response = await fetch(`/api/users/${session?.user.id}/favorites`);
+    const data = await response.json();
+
+    if(session?.user.id) {
+      setFavorites(data);
+    }
+  }
+
+  
 
   if(status === "unauthenticated") {
     return <p>You are not authorized. Please Sign In.</p>
@@ -39,7 +44,11 @@ const FavoritesPage = () => {
       {favorites.map((favorite) => (
       <PromptCard
       key={favorite._id}
-      post={favorite}/>
+      post={favorite}
+      updateFavorites={fetchFavorites()}
+      favorites={favorites}
+      
+      />
       ))}
     </div>
     
